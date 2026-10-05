@@ -1,0 +1,69 @@
+<div id="app">
+
+    <h1>To- Do List</h1>
+    <input type="text" v-model="newTask" placeholder="Please add a new task" @keyup.enter="add">
+    <button @click="add">Add Task</button>
+    <ul v-if="todos.length>0">
+        <li v-for="(todo,index) in todos">
+            <input type="checkbox" v-model="todo.completed">
+            <span :class="{completed:todo.completed}">{{ todo.task }}</span>
+            <button @click="removeTask(index)">delete, delete</button>
+
+        </li>
+        <button @click="markcomplete">I did them all!</button>
+        <br></br>
+        <button @click="deleteeverything">erase EVERYTHING</button>
+    </ul>
+    <p v-else>you dont have any, add MORE!</p>
+
+    <div v-if="todos.length > 0">
+        <p>Total Tasks:{{totalTask}}</p>
+        <p>Completed Tasks:{{completedTask}}</p>
+    </div>
+</div>
+<script src="../vue2.js"></script>
+<script>
+    new Vue({
+        el:"#app",
+        data:{
+            todos: [],
+            newTask:"",
+        },
+        methods:{
+            add(){
+                if (this.newTask == "") return;
+                this.todos.push({task:this.newTask,completed:false});
+                this.newTask="";
+
+
+            },
+            removeTask(index){
+                this.todos.splice(index,1)
+                
+            },
+            markcomplete(){
+                for(let i=0;i<this.todos.length;i++){
+                    this.todos[i].completed=true;
+                }
+            },
+            deleteeverything(){
+                this.todos=[];
+            },
+        },
+        computed:{
+            totalTask(){
+                return this.todos.length;
+            },
+            completedTask(){
+                completedTask=this.todos.filter((todo)=>{
+                    return todo.completed==true;
+                    
+                });
+                return completedTask.length;
+            
+            }
+
+
+        }
+    })
+</script>
